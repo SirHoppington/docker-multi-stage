@@ -1,0 +1,22 @@
+FROM python:3.11.15-slim AS compile
+
+
+# Setup a working directory that container will run from
+WORKDIR /app
+
+RUN python -m venv /opt/venv
+# Make sure we use the virtualenv:
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Copy over any required files from your host
+COPY requirements.txt .
+
+# Install the requirements
+RUN pip install --no-cache-dir -r requirements.txt
+
+FROM python:3.11.15-slim AS build
+COPY --from=compile /opt/venv /opt/venv
+
+# Make sure we use the virtualenv:
+ENV PATH="/opt/venv/bin:$PATH"
+ENTRYPOINT ["./entrypoint.sh"]
