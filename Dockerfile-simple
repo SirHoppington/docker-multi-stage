@@ -1,4 +1,4 @@
-FROM python:3.11.15-slim AS compile
+FROM python:3.11.15-slim
 
 
 # Setup a working directory that container will run from
@@ -14,8 +14,8 @@ COPY requirements.txt .
 # Install the requirements
 RUN pip install --no-cache-dir -r requirements.txt
 
-FROM python:3.11.15-slim AS build
-COPY --from=compile /opt/venv /opt/venv
+FROM python:3.11.15-slim
+COPY --from=0 /opt/venv /opt/venv
 
 # Make sure we use the virtualenv:
 ENV PATH="/opt/venv/bin:$PATH"
